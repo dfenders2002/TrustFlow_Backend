@@ -7,3 +7,9 @@ data class UserRegisterResponse(
     val status: String,
     val user: User? = null
 )
+
+@Serializable
+data class UserLoginResponse(
+    val status: String,
+    val user: User? = null
+)
