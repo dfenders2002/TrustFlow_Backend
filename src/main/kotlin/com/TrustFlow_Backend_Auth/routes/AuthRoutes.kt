@@ -1,41 +1,46 @@
 package com.TrustFlow_Backend_Auth.routes
 
-import com.TrustFlow_Backend_Auth.dao.UserDao
+import com.TrustFlow_Backend_Auth.data.repositories.UserRepositoryImpl
+import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
+import com.TrustFlow_Backend_Auth.domain.usecases.DeleteUser
+import com.TrustFlow_Backend_Auth.domain.usecases.LoginUser
+import com.TrustFlow_Backend_Auth.domain.usecases.RegisterUser
+import com.TrustFlow_Backend_Auth.domain.usecases.UpdateUser
 import com.TrustFlow_Backend_Auth.models.User
-import com.TrustFlow_Backend_Auth.models.UserLoginResponse
-import com.TrustFlow_Backend_Auth.models.UserRegisterResponse
-import io.ktor.server.application.*
-import io.ktor.server.response.*
+import com.TrustFlow_Backend_Auth.plugins.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import com.TrustFlow_Backend_Auth.plugins.*
-
 
 fun Route.authRoutes() {
-    val userDao = UserDao()
+    // Initialize repository and use cases
+    val userRepository: UserRepository = UserRepositoryImpl()
+    val registerUser = RegisterUser(userRepository)
+    val loginUser = LoginUser(userRepository)
+    val updateUser = UpdateUser(userRepository)
+    val deleteUser = DeleteUser(userRepository)
 
     post("/register") {
         val user = call.receive<User>()
-        val addedUser = userDao.addUser(user)
+        val addedUser = registerUser(user)
         if (addedUser != null) {
-            call.respond(UserRegisterResponse(status = "User registered", user = addedUser))
+            call.respond(mapOf("status" to "User registered", "user" to addedUser))
         } else {
-            call.respond(UserRegisterResponse(status = "Registration failed"))
+            call.respond(mapOf("status" to "Registration failed"))
         }
     }
 
     post("/login") {
         val credentials = call.receive<User>()
-        val user = userDao.findUserByUsername(credentials.username)
-        if (user != null && user.password == credentials.password) {
+        val user = loginUser(credentials.username, credentials.password)
+        if (user != null) {
             call.sessions.set(UserSession(user.id!!))
-            call.respond(UserLoginResponse(status = "Logged in", user = user))
+            call.respond(mapOf("status" to "Logged in", "user" to user))
         } else {
-            call.respond(UserLoginResponse(status = "Invalid credentials"))
+            call.respond(mapOf("status" to "Invalid credentials"))
         }
     }
-
 
     post("/logout") {
         call.sessions.clear<UserSession>()
@@ -49,7 +54,7 @@ fun Route.authRoutes() {
             return@put
         }
         val updatedUser = call.receive<User>()
-        val success = userDao.updateUser(session.userId, updatedUser)
+        val success = updateUser(session.userId, updatedUser)
         if (success) {
             call.respond(mapOf("status" to "User updated"))
         } else {
@@ -57,18 +62,18 @@ fun Route.authRoutes() {
         }
     }
 
-//    delete("/delete") {
-//        val session = call.sessions.get<UserSession>()
-//        if (session == null) {
-//            call.respond(mapOf("status" to "Unauthorized"))
-//            return@delete
-//        }
-//        val success = userDao.deleteUser(session.userId)
-//        if (success) {
-//            call.sessions.clear<UserSession>()
-//            call.respond(mapOf("status" to "User deleted"))
-//        } else {
-//            call.respond(mapOf("status" to "Deletion failed"))
-//        }
-//    }
+    delete("/delete") {
+        val session = call.sessions.get<UserSession>()
+        if (session == null) {
+            call.respond(mapOf("status" to "Unauthorized"))
+            return@delete
+        }
+        val success = deleteUser(session.userId)
+        if (success) {
+            call.sessions.clear<UserSession>()
+            call.respond(mapOf("status" to "User deleted"))
+        } else {
+            call.respond(mapOf("status" to "Deletion failed"))
+        }
+    }
 }
