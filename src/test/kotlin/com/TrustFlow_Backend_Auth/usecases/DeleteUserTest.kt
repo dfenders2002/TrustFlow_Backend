@@ -23,7 +23,7 @@ class DeleteUserTest {
         val result = deleteUser(userId)
 
         assertTrue(result)
-        coVerify { userRepository.deleteUser(userId) }
+        coVerify(exactly = 1) { userRepository.deleteUser(userId) }
     }
 
     @Test
@@ -35,6 +35,6 @@ class DeleteUserTest {
         val result = deleteUser(userId)
 
         assertFalse(result)
-        coVerify { userRepository.deleteUser(userId) }
+        coVerify(exactly = 1) { userRepository.deleteUser(userId) }
     }
 }

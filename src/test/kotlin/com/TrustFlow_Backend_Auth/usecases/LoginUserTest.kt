@@ -29,7 +29,7 @@ class LoginUserTest {
 
         assertNotNull(result)
         assertEquals(user, result)
-        coVerify { userRepository.findUserByUsername(username) }
+        coVerify(exactly = 1) { userRepository.findUserByUsername(username) }
     }
 
     @Test
@@ -45,7 +45,7 @@ class LoginUserTest {
         val result = loginUser(username, wrongPassword)
 
         assertNull(result)
-        coVerify { userRepository.findUserByUsername(username) }
+        coVerify(exactly = 1) { userRepository.findUserByUsername(username) }
     }
 
     @Test
@@ -58,6 +58,6 @@ class LoginUserTest {
         val result = loginUser(username, password)
 
         assertNull(result)
-        coVerify { userRepository.findUserByUsername(username) }
+        coVerify(exactly = 1) { userRepository.findUserByUsername(username) }
     }
 }

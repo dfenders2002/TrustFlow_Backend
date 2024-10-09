@@ -4,6 +4,7 @@ import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
 import com.TrustFlow_Backend_Auth.domain.usecases.RegisterUser
 import com.TrustFlow_Backend_Auth.models.Role
 import com.TrustFlow_Backend_Auth.models.User
+import com.TrustFlow_Backend_Auth.models.UserRegisterRequest
 import com.TrustFlow_Backend_Auth.utils.PasswordHasher
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -19,23 +20,17 @@ class RegisterUserTest {
 
     @Test
     fun `should register a new user`() = runBlocking {
-        // Arrange
-        val user = User(username = "testuser", password = "password123", email = "test@example.com")
-        val hashedPassword = PasswordHasher.hash(user.password)
-        val userWithHashedPassword = user.copy(password = hashedPassword)
-        val savedUser = userWithHashedPassword.copy(id = 1)
+        val userRequest = UserRegisterRequest(username = "testuser", password = "password123", email = "test@example.com")
+        val hashedPassword = PasswordHasher.hash(userRequest.password)
+        val savedUser = User(username = userRequest.username, password = hashedPassword, email = userRequest.email, role = Role.USER, id = 1)
 
         coEvery { userRepository.addUser(any()) } returns savedUser
 
-        // Act
-        val result = registerUser(user)
+        val result = registerUser(userRequest)
 
-        // Assert
         assertNotNull(result)
         assertEquals(savedUser, result)
 
-        // Verify that addUser was called with a User object that has the correct username, email, role,
-        // and that the password is hashed (i.e., different from the plain password).
         coVerify(exactly = 1) {
             userRepository.addUser(match {
                 it.username == "testuser" &&
@@ -49,18 +44,16 @@ class RegisterUserTest {
 
     @Test
     fun `should return null when registration fails`() = runBlocking {
-        // Arrange
-        val user = User(username = "testuser", password = "password123", email = "test@example.com")
-        val hashedPassword = PasswordHasher.hash(user.password)
-        val userWithHashedPassword = user.copy(password = hashedPassword)
+        val userRequest = UserRegisterRequest(username = "testuser", password = "password123", email = "test@example.com")
+        val hashedPassword = PasswordHasher.hash(userRequest.password)
+        val savedUser = User(username = userRequest.username, password = hashedPassword, email = userRequest.email, role = Role.USER, id = 1)
 
         coEvery { userRepository.addUser(any()) } returns null
 
-        // Act
-        val result = registerUser(user)
+        val result = registerUser(userRequest)
 
-        // Assert
         assertNull(result)
+
         coVerify(exactly = 1) {
             userRepository.addUser(match {
                 it.username == "testuser" &&
