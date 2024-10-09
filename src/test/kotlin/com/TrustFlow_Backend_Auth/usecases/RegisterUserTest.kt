@@ -45,8 +45,7 @@ class RegisterUserTest {
     @Test
     fun `should return null when registration fails`() = runBlocking {
         val userRequest = UserRegisterRequest(username = "testuser", password = "password123", email = "test@example.com")
-        val hashedPassword = PasswordHasher.hash(userRequest.password)
-        val savedUser = User(username = userRequest.username, password = hashedPassword, email = userRequest.email, role = Role.USER, id = 1)
+
 
         coEvery { userRepository.addUser(any()) } returns null
 
