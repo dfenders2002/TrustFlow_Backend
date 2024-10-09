@@ -1,7 +1,7 @@
 package com.TrustFlow_Backend_Auth.models
 
-import org.jetbrains.exposed.sql.Table
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.sql.Table
 
 @Serializable
 data class User(
@@ -21,5 +21,3 @@ object Users : Table() {
     override val primaryKey = PrimaryKey(id)
 }
 
-@Serializable
-data class UserDTO(val id: Int, val username: String, val email: String)

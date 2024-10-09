@@ -16,4 +16,5 @@ fun Application.module() {
     configureDatabases()
     configureMonitoring()
     configureRouting()
+    configureCORS()
 }

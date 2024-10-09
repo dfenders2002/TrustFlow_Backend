@@ -7,6 +7,8 @@ import com.TrustFlow_Backend_Auth.domain.usecases.LoginUser
 import com.TrustFlow_Backend_Auth.domain.usecases.RegisterUser
 import com.TrustFlow_Backend_Auth.domain.usecases.UpdateUser
 import com.TrustFlow_Backend_Auth.models.User
+import com.TrustFlow_Backend_Auth.models.UserRegisterRequest
+import com.TrustFlow_Backend_Auth.models.UserResponse
 import com.TrustFlow_Backend_Auth.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -22,12 +24,14 @@ fun Route.authRoutes() {
     val deleteUser = DeleteUser(userRepository)
 
     post("/register") {
-        val user = call.receive<User>()
+        val user = call.receive<UserRegisterRequest>()
         val addedUser = registerUser(user)
         if (addedUser != null) {
-            call.respond(mapOf("status" to "User registered", "user" to addedUser))
+            val response = UserResponse(status = "User registered", user = addedUser)
+            call.respond(response)
         } else {
-            call.respond(mapOf("status" to "Registration failed"))
+            val response = UserResponse(status = "Registration failed", user = null)
+            call.respond(response)
         }
     }
 
