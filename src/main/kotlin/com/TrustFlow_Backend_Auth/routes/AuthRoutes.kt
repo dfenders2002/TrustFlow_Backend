@@ -7,9 +7,10 @@ import com.TrustFlow_Backend_Auth.domain.usecases.LoginUser
 import com.TrustFlow_Backend_Auth.domain.usecases.RegisterUser
 import com.TrustFlow_Backend_Auth.domain.usecases.UpdateUser
 import com.TrustFlow_Backend_Auth.models.User
+import com.TrustFlow_Backend_Auth.models.UserLoginRequest
 import com.TrustFlow_Backend_Auth.models.UserRegisterRequest
 import com.TrustFlow_Backend_Auth.models.UserResponse
-import com.TrustFlow_Backend_Auth.plugins.*
+import com.TrustFlow_Backend_Auth.sessions.UserSession
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -36,13 +37,15 @@ fun Route.authRoutes() {
     }
 
     post("/login") {
-        val credentials = call.receive<User>()
+        val credentials = call.receive<UserLoginRequest>()
         val user = loginUser(credentials.username, credentials.password)
         if (user != null) {
             call.sessions.set(UserSession(user.id!!))
-            call.respond(mapOf("status" to "Logged in", "user" to user))
+            val response = UserResponse(status = "Logged in", user = user)
+            call.respond(response)
         } else {
-            call.respond(mapOf("status" to "Invalid credentials"))
+            val response = UserResponse(status = "Invalid credentials", user = null)
+            call.respond(response)
         }
     }
 
@@ -58,13 +61,20 @@ fun Route.authRoutes() {
             return@put
         }
         val updatedUser = call.receive<User>()
-        val success = updateUser(session.userId, updatedUser)
+        if (updatedUser.id == null || updatedUser.id != session.userId) {
+            call.respond(mapOf("status" to "Invalid user ID"))
+            return@put
+        }
+        val success = updateUser(updatedUser.id, updatedUser)
         if (success) {
-            call.respond(mapOf("status" to "User updated"))
+            val user = userRepository.findUserById(updatedUser.id)
+            val response = UserResponse(status = "User updated", user = user)
+            call.respond(response)
         } else {
             call.respond(mapOf("status" to "Update failed"))
         }
     }
+
 
     delete("/delete") {
         val session = call.sessions.get<UserSession>()
@@ -80,4 +90,19 @@ fun Route.authRoutes() {
             call.respond(mapOf("status" to "Deletion failed"))
         }
     }
+
+    get("/user") {
+        val session = call.sessions.get<UserSession>()
+        if (session == null) {
+            call.respond(mapOf("status" to "Unauthorized"))
+            return@get
+        }
+        val user = userRepository.findUserById(session.userId)
+        if (user != null) {
+            call.respond(UserResponse(status = "success", user = user))
+        } else {
+            call.respond(mapOf("status" to "User not found"))
+        }
+    }
+
 }

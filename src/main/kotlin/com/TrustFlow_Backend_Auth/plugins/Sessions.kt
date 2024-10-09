@@ -1,5 +1,6 @@
 package com.TrustFlow_Backend_Auth.plugins
 
+import com.TrustFlow_Backend_Auth.sessions.UserSession
 import io.ktor.server.application.*
 import io.ktor.server.sessions.*
 

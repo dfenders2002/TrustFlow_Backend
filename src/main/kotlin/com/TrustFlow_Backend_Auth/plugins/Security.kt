@@ -1,13 +1,10 @@
 package com.TrustFlow_Backend_Auth.plugins
 
+import com.TrustFlow_Backend_Auth.sessions.UserSession
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.serialization.*
 
-@Serializable
-data class UserSession(val userId: Int)
 
 fun Application.configureSecurity() {
     install(Sessions) {
