@@ -1,4 +1,4 @@
-package com.TrustFlow_Backend_Auth.usecases
+package com.TrustFlow_Backend_Auth.usecases.user
 
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
 import com.TrustFlow_Backend_Auth.domain.usecases.user.DeleteUser
