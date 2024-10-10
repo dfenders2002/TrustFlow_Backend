@@ -21,7 +21,7 @@ This is the backend for a basic authentication system, built using Kotlin and th
 2. **Database Setup**:
    - Create a PostgreSQL database in pgAdmin.
    - Note down the database name, username, and password.
-   - Update the `application.conf` file with your PostgreSQL connection details:
+   - Update the `database.kt` file with your PostgreSQL connection details:
      ```hocon
      database {
        url = "jdbc:postgresql://localhost:5432/<your-database-name>"
