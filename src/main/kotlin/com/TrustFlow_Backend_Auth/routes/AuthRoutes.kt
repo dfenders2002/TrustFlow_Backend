@@ -2,7 +2,9 @@ package com.TrustFlow_Backend_Auth.routes
 
 import com.TrustFlow_Backend_Auth.data.repositories.UserRepositoryImpl
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
+import com.TrustFlow_Backend_Auth.domain.usecases.user.DeleteOtherUser
 import com.TrustFlow_Backend_Auth.domain.usecases.user.DeleteUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.GetAllUsers
 import com.TrustFlow_Backend_Auth.domain.usecases.user.LoginUser
 import com.TrustFlow_Backend_Auth.domain.usecases.user.RegisterUser
 import com.TrustFlow_Backend_Auth.domain.usecases.user.UpdateUser
@@ -25,8 +27,8 @@ fun Route.authRoutes() {
     val loginUser = LoginUser(userRepository)
     val updateUser = UpdateUser(userRepository)
     val deleteUser = DeleteUser(userRepository)
-    val getAllUsers = userRepository::getAllUsers
-    val deleteOtherUser = userRepository::deleteUser
+    val getAllUsers = GetAllUsers(userRepository)
+    val deleteOtherUser = DeleteOtherUser(userRepository)
 
     post("/register") {
         val user = call.receive<UserRegisterRequest>()
