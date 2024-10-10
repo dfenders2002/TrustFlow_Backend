@@ -62,4 +62,16 @@ class UserRepositoryImpl : UserRepository {
             }
             .singleOrNull()
     }
+
+    override suspend fun getAllUsers(): List<User> = transaction {
+        Users.selectAll().map {
+            User(
+                id = it[Users.id],
+                username = it[Users.username],
+                password = it[Users.password],
+                email = it[Users.email],
+                role = it[Users.role]
+            )
+        }
+    }
 }

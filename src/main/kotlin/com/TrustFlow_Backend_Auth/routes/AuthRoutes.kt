@@ -2,14 +2,16 @@ package com.TrustFlow_Backend_Auth.routes
 
 import com.TrustFlow_Backend_Auth.data.repositories.UserRepositoryImpl
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
-import com.TrustFlow_Backend_Auth.domain.usecases.DeleteUser
-import com.TrustFlow_Backend_Auth.domain.usecases.LoginUser
-import com.TrustFlow_Backend_Auth.domain.usecases.RegisterUser
-import com.TrustFlow_Backend_Auth.domain.usecases.UpdateUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.DeleteUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.LoginUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.RegisterUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.UpdateUser
+import com.TrustFlow_Backend_Auth.models.Role
 import com.TrustFlow_Backend_Auth.models.User
 import com.TrustFlow_Backend_Auth.models.UserLoginRequest
 import com.TrustFlow_Backend_Auth.models.UserRegisterRequest
 import com.TrustFlow_Backend_Auth.models.UserResponse
+import com.TrustFlow_Backend_Auth.models.UsersResponse
 import com.TrustFlow_Backend_Auth.sessions.UserSession
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -23,6 +25,8 @@ fun Route.authRoutes() {
     val loginUser = LoginUser(userRepository)
     val updateUser = UpdateUser(userRepository)
     val deleteUser = DeleteUser(userRepository)
+    val getAllUsers = userRepository::getAllUsers
+    val deleteOtherUser = userRepository::deleteUser
 
     post("/register") {
         val user = call.receive<UserRegisterRequest>()
@@ -105,5 +109,53 @@ fun Route.authRoutes() {
             call.respond(mapOf("status" to "User not found"))
         }
     }
+    get("/users") {
+        val session = call.sessions.get<UserSession>()
+        if (session == null) {
+            call.respond(mapOf("status" to "Unauthorized"))
+            return@get
+        }
+        val requestingUser = userRepository.findUserById(session.userId)
+        if (requestingUser?.role != Role.ADMIN) {
+            call.respond(mapOf("status" to "Forbidden: Admins only"))
+            return@get
+        }
 
+        val allUsers = getAllUsers()
+        //remove your self
+        val users = allUsers.filter { it.id != session.userId }
+        call.respond(UsersResponse(status = "success", users = users))
+    }
+
+    delete("/users/{id}") {
+        val session = call.sessions.get<UserSession>()
+        if (session == null) {
+            call.respond(mapOf("status" to "Unauthorized"))
+            return@delete
+        }
+        val requestingUser = userRepository.findUserById(session.userId)
+        if (requestingUser?.role != Role.ADMIN) {
+            call.respond(mapOf("status" to "Forbidden: Admins only"))
+            return@delete
+        }
+
+        val idParam = call.parameters["id"]
+        val userId = idParam?.toIntOrNull()
+        if (userId == null) {
+            call.respond(mapOf("status" to "Invalid user ID"))
+            return@delete
+        }
+
+        if (userId == session.userId) {
+            call.respond(mapOf("status" to "Cannot delete yourself using this endpoint"))
+            return@delete
+        }
+
+        val success = deleteOtherUser(userId)
+        if (success) {
+            call.respond(mapOf("status" to "User deleted"))
+        } else {
+            call.respond(mapOf("status" to "Deletion failed"))
+        }
+    }
 }

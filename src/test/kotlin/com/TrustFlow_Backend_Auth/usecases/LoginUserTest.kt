@@ -1,7 +1,8 @@
 package com.TrustFlow_Backend_Auth.usecases
 
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
-import com.TrustFlow_Backend_Auth.domain.usecases.LoginUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.LoginUser
+import com.TrustFlow_Backend_Auth.models.Role
 import com.TrustFlow_Backend_Auth.models.User
 import com.TrustFlow_Backend_Auth.utils.PasswordHasher
 import io.mockk.coEvery
@@ -21,7 +22,7 @@ class LoginUserTest {
         val username = "testuser"
         val password = "password123"
         val hashedPassword = PasswordHasher.hash(password)
-        val user = User(id = 1, username = username, password = hashedPassword, email = "test@example.com")
+        val user = User(id = 1, username = username, password = hashedPassword, email = "test@example.com", role = Role.USER)
 
         coEvery { userRepository.findUserByUsername(username) } returns user
 
@@ -38,7 +39,7 @@ class LoginUserTest {
         val password = "password123"
         val wrongPassword = "wrongpassword"
         val hashedPassword = PasswordHasher.hash(password)
-        val user = User(id = 1, username = username, password = hashedPassword, email = "test@example.com")
+        val user = User(id = 1, username = username, password = hashedPassword, email = "test@example.com", role = Role.USER)
 
         coEvery { userRepository.findUserByUsername(username) } returns user
 

@@ -1,7 +1,7 @@
 package com.TrustFlow_Backend_Auth.usecases
 
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
-import com.TrustFlow_Backend_Auth.domain.usecases.RegisterUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.RegisterUser
 import com.TrustFlow_Backend_Auth.models.Role
 import com.TrustFlow_Backend_Auth.models.User
 import com.TrustFlow_Backend_Auth.models.UserRegisterRequest

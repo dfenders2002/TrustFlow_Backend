@@ -1,6 +1,7 @@
 package com.TrustFlow_Backend_Auth.plugins
 
 import com.TrustFlow_Backend_Auth.routes.authRoutes
+import com.TrustFlow_Backend_Auth.routes.taskRoutes
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -17,5 +18,6 @@ fun Application.configureSerialization() {
     }
     routing {
         authRoutes()
+        taskRoutes()
     }
 }

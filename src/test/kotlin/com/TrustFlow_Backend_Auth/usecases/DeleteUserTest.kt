@@ -1,7 +1,7 @@
 package com.TrustFlow_Backend_Auth.usecases
 
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
-import com.TrustFlow_Backend_Auth.domain.usecases.DeleteUser
+import com.TrustFlow_Backend_Auth.domain.usecases.user.DeleteUser
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

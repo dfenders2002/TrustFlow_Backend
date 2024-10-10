@@ -1,10 +1,11 @@
 package com.TrustFlow_Backend_Auth.plugins
 
+import com.TrustFlow_Backend_Auth.models.Tasks
 import com.TrustFlow_Backend_Auth.models.Users
 import io.ktor.server.application.*
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureDatabases() {
     val database = Database.connect(
@@ -14,6 +15,6 @@ fun Application.configureDatabases() {
         password = "WelkomDaan",
     )
     transaction(database) {
-        create(Users)
+        SchemaUtils.createMissingTablesAndColumns(Users, Tasks)
     }
 }

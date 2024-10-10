@@ -3,13 +3,13 @@ package com.TrustFlow_Backend_Auth.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserResponse(
+data class TaskResponse(
     val status: String,
-    val user: User?
+    val task: Task? = null
 )
 
 @Serializable
-data class UsersResponse(
+data class TasksResponse(
     val status: String,
-    val users: List<User>
+    val tasks: List<Task>
 )
