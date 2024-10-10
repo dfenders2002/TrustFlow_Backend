@@ -1,9 +1,9 @@
 package com.TrustFlow_Backend_Auth.data.repositories
 
 import com.TrustFlow_Backend_Auth.domain.repositories.TaskRepository
-import com.TrustFlow_Backend_Auth.models.Status
-import com.TrustFlow_Backend_Auth.models.Task
-import com.TrustFlow_Backend_Auth.models.Tasks
+import com.TrustFlow_Backend_Auth.models.task.Status
+import com.TrustFlow_Backend_Auth.models.task.Task
+import com.TrustFlow_Backend_Auth.models.task.Tasks
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction

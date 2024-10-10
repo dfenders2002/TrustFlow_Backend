@@ -2,9 +2,9 @@ package com.TrustFlow_Backend_Auth.usecases.task
 
 import com.TrustFlow_Backend_Auth.domain.repositories.TaskRepository
 import com.TrustFlow_Backend_Auth.domain.usecases.task.GetCompletedTasks
-import com.TrustFlow_Backend_Auth.models.Priority
-import com.TrustFlow_Backend_Auth.models.Status
-import com.TrustFlow_Backend_Auth.models.Task
+import com.TrustFlow_Backend_Auth.models.task.Priority
+import com.TrustFlow_Backend_Auth.models.task.Status
+import com.TrustFlow_Backend_Auth.models.task.Task
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

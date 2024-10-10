@@ -1,6 +1,6 @@
 package com.TrustFlow_Backend_Auth.domain.repositories
 
-import com.TrustFlow_Backend_Auth.models.Task
+import com.TrustFlow_Backend_Auth.models.task.Task
 
 interface TaskRepository {
     suspend fun createTask(task: Task): Task?

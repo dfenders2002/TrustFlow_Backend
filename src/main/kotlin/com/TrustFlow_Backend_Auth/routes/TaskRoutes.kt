@@ -6,7 +6,11 @@ import com.TrustFlow_Backend_Auth.domain.usecases.task.CreateTask
 import com.TrustFlow_Backend_Auth.domain.usecases.task.DeleteTask
 import com.TrustFlow_Backend_Auth.domain.usecases.task.GetCompletedTasks
 import com.TrustFlow_Backend_Auth.domain.usecases.task.GetPendingTasks
-import com.TrustFlow_Backend_Auth.models.*
+import com.TrustFlow_Backend_Auth.models.task.CreateTaskRequest
+import com.TrustFlow_Backend_Auth.models.task.Status
+import com.TrustFlow_Backend_Auth.models.task.Task
+import com.TrustFlow_Backend_Auth.models.task.TaskResponse
+import com.TrustFlow_Backend_Auth.models.task.TasksResponse
 import com.TrustFlow_Backend_Auth.sessions.UserSession
 import io.ktor.server.request.*
 import io.ktor.server.response.*

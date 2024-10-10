@@ -1,9 +1,9 @@
 package com.TrustFlow_Backend_Auth.domain.usecases.user
 
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
-import com.TrustFlow_Backend_Auth.models.Role
-import com.TrustFlow_Backend_Auth.models.User
-import com.TrustFlow_Backend_Auth.models.UserRegisterRequest
+import com.TrustFlow_Backend_Auth.models.user.Role
+import com.TrustFlow_Backend_Auth.models.user.User
+import com.TrustFlow_Backend_Auth.models.user.UserRegisterRequest
 import com.TrustFlow_Backend_Auth.utils.PasswordHasher
 
 class RegisterUser(private val userRepository: UserRepository) {

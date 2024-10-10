@@ -1,8 +1,8 @@
 package com.TrustFlow_Backend_Auth.data.repositories
 
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
-import com.TrustFlow_Backend_Auth.models.User
-import com.TrustFlow_Backend_Auth.models.Users
+import com.TrustFlow_Backend_Auth.models.user.User
+import com.TrustFlow_Backend_Auth.models.user.Users
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction

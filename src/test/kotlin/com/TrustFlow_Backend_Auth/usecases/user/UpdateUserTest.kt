@@ -2,8 +2,8 @@ package com.TrustFlow_Backend_Auth.usecases.user
 
 import com.TrustFlow_Backend_Auth.domain.repositories.UserRepository
 import com.TrustFlow_Backend_Auth.domain.usecases.user.UpdateUser
-import com.TrustFlow_Backend_Auth.models.Role
-import com.TrustFlow_Backend_Auth.models.User
+import com.TrustFlow_Backend_Auth.models.user.Role
+import com.TrustFlow_Backend_Auth.models.user.User
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

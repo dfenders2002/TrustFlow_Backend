@@ -1,4 +1,5 @@
-package com.TrustFlow_Backend_Auth.models
+package com.TrustFlow_Backend_Auth.models.task
+import com.TrustFlow_Backend_Auth.models.user.Users
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table

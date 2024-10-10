@@ -1,6 +1,6 @@
 package com.TrustFlow_Backend_Auth.domain.repositories
 
-import com.TrustFlow_Backend_Auth.models.User
+import com.TrustFlow_Backend_Auth.models.user.User
 
 interface UserRepository {
     suspend fun addUser(user: User): User?

@@ -1,7 +1,7 @@
 package com.TrustFlow_Backend_Auth.plugins
 
-import com.TrustFlow_Backend_Auth.models.Tasks
-import com.TrustFlow_Backend_Auth.models.Users
+import com.TrustFlow_Backend_Auth.models.task.Tasks
+import com.TrustFlow_Backend_Auth.models.user.Users
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils

@@ -1,4 +1,4 @@
-package com.TrustFlow_Backend_Auth.models
+package com.TrustFlow_Backend_Auth.models.task
 
 import kotlinx.serialization.Serializable
 
