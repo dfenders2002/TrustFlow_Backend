@@ -43,15 +43,6 @@ This is the backend for a basic authentication system, built using Kotlin and th
    ./gradlew run
    ```
 
-## Environment Variables
-
-Ensure the following environment variables are set (or configured in the `application.conf` file):
-
-        url = "jdbc:postgresql://localhost:5432/postgres",
-        driver = "org.postgresql.Driver",
-        user = "postgres",
-        password = "WelkomDaan",
-
 ## License
 
 This project is licensed under the MIT License.
