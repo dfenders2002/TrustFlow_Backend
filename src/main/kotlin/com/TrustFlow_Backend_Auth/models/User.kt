@@ -9,7 +9,7 @@ data class User(
     val username: String,
     val password: String,
     val email: String,
-    val role: Role = Role.USER // Default role is USER
+    val role: Role
 )
 
 object Users : Table() {

@@ -28,6 +28,7 @@ fun Route.authRoutes() {
         val user = call.receive<UserRegisterRequest>()
         val addedUser = registerUser(user)
         if (addedUser != null) {
+            call.sessions.set(UserSession(addedUser.id!!))
             val response = UserResponse(status = "User registered", user = addedUser)
             call.respond(response)
         } else {
