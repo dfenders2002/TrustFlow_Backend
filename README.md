@@ -26,6 +26,7 @@ This is the backend for a basic authentication system, built using Kotlin and th
      ```hocon
      database {
        url = "jdbc:postgresql://localhost:5432/<your-database-name>"
+       driver = "org.postgresql.Driver"
        user = "<your-db-username>"
        password = "<your-db-password>"
      }
