@@ -1,4 +1,3 @@
-<<<<<<< master
 # Kotlin Backend - Authentication System
 
 ## Overview
