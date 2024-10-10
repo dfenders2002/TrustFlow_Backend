@@ -31,43 +31,43 @@ class TaskRepositoryImpl : TaskRepository {
         Tasks.deleteWhere { Tasks.id eq id } > 0
     }
 
-    override suspend fun getPendingTasks(userId: Int): List<Task> = transaction {
-        Tasks.select { (Tasks.userId eq userId) and (Tasks.status eq Status.PENDING) }
-            .map {
-                Task(
-                    id = it[Tasks.id],
-                    userId = it[Tasks.userId],
-                    description = it[Tasks.description],
-                    priority = it[Tasks.priority],
-                    status = it[Tasks.status]
-                )
+    suspend fun getTasksByStatus(userId: Int, status: Status): List<Task> = transaction {
+        Tasks.selectAll()
+            .mapNotNull {
+                if ((it[Tasks.userId] == userId) && (it[Tasks.status] == status)) {
+                    toTask(it)
+                } else {
+                    null
+                }
             }
     }
 
-    override suspend fun getCompletedTasks(userId: Int): List<Task> = transaction {
-        Tasks.select { (Tasks.userId eq userId) and (Tasks.status eq Status.COMPLETED) }
-            .map {
-                Task(
-                    id = it[Tasks.id],
-                    userId = it[Tasks.userId],
-                    description = it[Tasks.description],
-                    priority = it[Tasks.priority],
-                    status = it[Tasks.status]
-                )
-            }
+    private fun toTask(row: ResultRow): Task {
+        return Task(
+            id = row[Tasks.id],
+            userId = row[Tasks.userId],
+            description = row[Tasks.description],
+            priority = row[Tasks.priority],
+            status = row[Tasks.status]
+        )
+    }
+
+    override suspend fun getPendingTasks(userId: Int): List<Task> {
+        return getTasksByStatus(userId, Status.PENDING)
+    }
+
+    override suspend fun getCompletedTasks(userId: Int): List<Task> {
+        return getTasksByStatus(userId, Status.COMPLETED)
     }
 
     override suspend fun findTaskById(id: Int): Task? = transaction {
-        Tasks.select { Tasks.id eq id }
-            .map {
-                Task(
-                    id = it[Tasks.id],
-                    userId = it[Tasks.userId],
-                    description = it[Tasks.description],
-                    priority = it[Tasks.priority],
-                    status = it[Tasks.status]
-                )
-            }
-            .singleOrNull()
+        Tasks.selectAll()
+            .mapNotNull {
+                if (it[Tasks.id] == id) {
+                    toTask(it)
+                } else {
+                    null
+                }
+            }.singleOrNull()
     }
 }
